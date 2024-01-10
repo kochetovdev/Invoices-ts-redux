@@ -2,28 +2,11 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import Header from "./componets/Header";
 import Login from "./pages/Login";
 import Registration from "./pages/Registration";
-import InvoicesList from "./pages/InvoicesList";
 import { useAuth } from "./hooks/use-auth";
 import { Toaster } from "react-hot-toast";
-import InvoicesDetails from "./componets/InvoicesDetails";
-import InvoiceCreateItem from "./componets/InvoiceCreateItem";
 import Footer from "./componets/Footer";
 import Home from "./pages/Home";
-
-export const pathes = [
-  {
-    path: "/invoices",
-    element: <InvoicesList />,
-  },
-  {
-    path: "invoices/create",
-    element: <InvoicesList />,
-  },
-  {
-    path: "/invoices/:id",
-    element: <InvoicesList />,
-  },
-];
+import { pathes } from "./utils";
 
 function App() {
   const { isAuth } = useAuth();
@@ -35,18 +18,13 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Registration />} />
-          <Route
-            path="/invoices"
-            element={isAuth ? <InvoicesList /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="invoices/create"
-            element={isAuth ? <InvoiceCreateItem /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/invoices/:id"
-            element={isAuth ? <InvoicesDetails /> : <Navigate to="/login" />}
-          />
+          {pathes.map(({ path, element }) => (
+            <Route
+              key={path}
+              path={path}
+              element={isAuth ? element : <Navigate to="/login" />}
+            />
+          ))}
           <Route
             path="*"
             element={
