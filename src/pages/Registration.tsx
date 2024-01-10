@@ -11,7 +11,6 @@ import Spinner from "../componets/Spinner";
 import { saveUserDataToLocalstorage } from "../utils/saveUserDataToLocalStorage";
 
 const Registration: FC = () => {
-  const auth = getAuth();
   const [loading, setLoading] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -34,6 +33,7 @@ const Registration: FC = () => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setLoading(true);
+      const auth = getAuth();
       const createUser = await createUserWithEmailAndPassword(
         auth,
         data?.email,

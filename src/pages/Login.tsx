@@ -11,7 +11,6 @@ import toast from "react-hot-toast";
 import { saveUserDataToLocalstorage } from "../utils/saveUserDataToLocalStorage";
 
 const Login: FC = () => {
-  const auth = getAuth();
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -32,7 +31,7 @@ const Login: FC = () => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setLoading(true);
-
+      const auth = getAuth();
       const existUser = await signInWithEmailAndPassword(
         auth,
         data?.email,

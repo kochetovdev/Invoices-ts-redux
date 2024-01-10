@@ -1,18 +1,15 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Invoice } from "../../types/invoice";
-import axios from "axios";
 import delay from "delay";
-import { formattedDate } from "../../utils";
-import { v4 as uuidv4 } from 'uuid';
-
-const BASE_URL = "http://localhost:3000";
+import { formattedDate, idGenerator } from "../../utils";
+import { invoiceService } from "../../services/invoiceService";
 
 export const fetchInvoices = createAsyncThunk(
   "invoice/fetchInvoice",
   async function (_, { rejectWithValue }) {
     try {
       await delay(1000);
-      const res = await axios.get(`${BASE_URL}/invoices`);
+      const res = await invoiceService.getInvoices();
       if (res.status !== 200) {
         throw new Error("Server Error!");
       }
@@ -29,18 +26,18 @@ export const addNewInvoice = createAsyncThunk(
   async function (invoiceData: Invoice, { rejectWithValue, dispatch }) {
     try {
       const newInvoice = {
-        id: uuidv4,
+        id: idGenerator(),
         date_created: formattedDate,
         number: Number(invoiceData.number),
         comment: invoiceData.comment,
       };
-      const res = await axios.post(`${BASE_URL}/invoices`, newInvoice);
+      const res = await invoiceService.addNewInvoise(newInvoice);
 
       if (res.status !== 200) {
         throw new Error("Can't add invoices. Server Error.");
       }
 
-      dispatch(createInvoice(invoiceData))
+      dispatch(createInvoice(invoiceData));
     } catch (error: any) {
       return rejectWithValue(error.message as string);
     }
@@ -51,9 +48,7 @@ export const deleteInvoice = createAsyncThunk(
   "invoice/deleteInvoice",
   async (id: string, { rejectWithValue, dispatch }) => {
     try {
-      const res = await axios.delete(`${BASE_URL}/invoices/${id}`, {
-        method: "DELETE",
-      });
+      const res = await invoiceService.deleteInvoice(id);
       if (res.status !== 200) {
         throw new Error("Can't delete invoices. Server Error.");
       }
@@ -68,14 +63,13 @@ export const updateInvoice = createAsyncThunk(
   "invoice/updateInvoice",
   async (targetInvoice: Invoice, { rejectWithValue, dispatch }) => {
     try {
-      const res = await axios.patch(
-        `${BASE_URL}/invoices/${targetInvoice.id}`,
-        {
-          number: targetInvoice.number,
-          comment: targetInvoice.comment,
-          date_supplied: formattedDate,
-        }
-      );
+      const updateInvoice = {
+        id: targetInvoice.id,
+        number: targetInvoice.number,
+        comment: targetInvoice.comment,
+        date_supplied: formattedDate,
+      };
+      const res = await invoiceService.updateInvoice(updateInvoice)
       if (res.status !== 200) {
         throw new Error("Can't update invoices. Server Error.");
       }
@@ -113,7 +107,7 @@ const invoiceSlice = createSlice({
       );
     },
     createInvoice(state, { payload }: PayloadAction<Invoice>) {
-      state.invoices.push(payload)
+      state.invoices.push(payload);
     },
   },
   extraReducers: (builder) => {
@@ -139,6 +133,7 @@ const invoiceSlice = createSlice({
   },
 });
 
-export const { removeInvoice, updateInvoiceSync, createInvoice } = invoiceSlice.actions;
+export const { removeInvoice, updateInvoiceSync, createInvoice } =
+  invoiceSlice.actions;
 
 export default invoiceSlice.reducer;

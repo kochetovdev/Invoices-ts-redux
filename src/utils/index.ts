@@ -1,1 +1,2 @@
-export * from './formatedDate';
+export * from "./formatedDate";
+export * from "./idGenerator";

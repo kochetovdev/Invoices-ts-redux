@@ -10,6 +10,21 @@ import InvoiceCreateItem from "./componets/InvoiceCreateItem";
 import Footer from "./componets/Footer";
 import Home from "./pages/Home";
 
+export const pathes = [
+  {
+    path: "/invoices",
+    element: <InvoicesList />,
+  },
+  {
+    path: "invoices/create",
+    element: <InvoicesList />,
+  },
+  {
+    path: "/invoices/:id",
+    element: <InvoicesList />,
+  },
+];
+
 function App() {
   const { isAuth } = useAuth();
   return (
