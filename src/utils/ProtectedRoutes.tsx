@@ -12,7 +12,7 @@ export const pathes = [
     element: <InvoiceCreateItem />,
   },
   {
-    path: "/invoices/:id",
+    path: "invoices/:id",
     element: <InvoicesDetails />,
   },
 ];

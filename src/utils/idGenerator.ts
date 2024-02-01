@@ -1,7 +1,13 @@
-let nextId = 1;
-
 export function idGenerator() {
-  const newId = nextId;
-  nextId += 1;
-  return String(newId);
+  const length = 16;
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters.charAt(randomIndex);
+  }
+
+  return result;
 }

@@ -24,9 +24,7 @@ const InvoicesList = () => {
       <div className="grid justify-items-center mx-6 gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
         {!error &&
           status === "pending" &&
-          Array.from({ length: 8 }, (_, index) => (
-            <SkeletonInvoices key={index} />
-          ))}
+          Array.from({ length: 4 }, (_, index) => <SkeletonInvoices key={index} />)}
         {(error as string) && (
           <div>An error occurred error{error as string}</div>
         )}
