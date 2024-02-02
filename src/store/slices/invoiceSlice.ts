@@ -11,7 +11,6 @@ export const fetchInvoices = createAsyncThunk(
 
       return res;
     } catch (error: any) {
-
       return rejectWithValue(error.message as string);
     }
   }
@@ -27,6 +26,7 @@ export const addNewInvoice = createAsyncThunk(
         comment: invoiceData.comment,
       };
       await invoiceService.addNewInvoise(newInvoice);
+
       const invoices = await invoiceService.getInvoices();
 
       dispatch(createInvoice(invoices));
@@ -40,7 +40,7 @@ export const updateInvoice = createAsyncThunk(
   "invoice/updateInvoice",
   async (targetInvoice: Invoice, { rejectWithValue, dispatch }) => {
     try {
-      const updateInvoice = {
+      const updateInvoice: Invoice = {
         id: targetInvoice.id,
         number: targetInvoice.number,
         comment: targetInvoice.comment,
